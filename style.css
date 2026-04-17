@@ -641,10 +641,3 @@ body {
   background: var(--text-muted);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .sidebar { width: 0; overflow: hidden; }
-  .sidebar.collapsed { width: 0; }
-  .navbar { padding: 0 16px; }
-  .search-bar { width: 180px; }
-}
