@@ -294,17 +294,18 @@ body {
 }
 
 .sidebar-header {
-  height: 64px;
+  height: 80px; /* Increased height */
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  gap: 12px;
+  padding: 0 24px;
+  gap: 16px;
   border-bottom: 1px solid var(--border);
+  margin-bottom: 8px; /* Breathing room before menu */
 }
 
 .sidebar-brand-img {
-  height: 28px;
-  width: 28px;
+  height: 40px; /* Larger logo */
+  width: 40px;
   object-fit: contain;
   transition: all 0.3s ease;
 }
@@ -312,16 +313,17 @@ body {
 .sidebar.collapsed .sidebar-header {
   padding: 0;
   justify-content: center;
+  margin-bottom: 0;
 }
 
 .sidebar.collapsed .sidebar-brand-img {
-  height: 32px;
-  width: 32px;
+  height: 36px;
+  width: 36px;
 }
 
 .logo-text {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   white-space: nowrap;
   color: var(--accent);
 }
@@ -330,14 +332,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 10px;
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
 .hero-logo {
-  height: 80px;
+  height: 120px; /* High-impact hero logo */
   width: auto;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
 }
 
 .hero h1 {
