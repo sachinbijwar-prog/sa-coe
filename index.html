@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Portal | Centre of Excellence</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for stable icons (No DOM mutation crashes) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- React and Babel CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Combined Data and Logic for maximum reliability on local file protocol -->
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // --- Mock Data ---
+        const taxonomy = [
+            { id: "home", title: "HOME", icon: "Home" },
+            { id: "app-kb", title: "APPLICATION KNOWLEDGE BASE", icon: "BookOpen", children: [
+                { id: "informatica", title: "Informatica Migration & Best Practices" },
+                { id: "app-cdp", title: "Application Integration with CDP" },
+                { id: "etl-tooling", title: "ETL Tooling" },
+            ]},
+            { id: "platform-kb", title: "PLATFORM KNOWLEDGE BASE", icon: "Server", children: [
+                { id: "cloudera-overview", title: "Cloudera Platform Overview" },
+                { id: "platform-migration", title: "Platform Migration & Operations" },
+            ]},
+            { id: "dwh-arch", title: "DATA WAREHOUSE ARCHITECTURE", icon: "Layers", children: [
+                { id: "dwh-overview", title: "DWH Architectural Overview" },
+                { id: "data-modeling", title: "Data Modeling Standards" },
+                { id: "data-ingestion", title: "Data Ingestion Layer" },
+                { id: "etl-transformation", title: "ETL/ELT Transformation Layer" },
+                { id: "data-quality", title: "Data Quality & Validation Framework" },
+                { id: "metadata-lineage", title: "Metadata & Lineage" },
+                { id: "data-governance", title: "Data Governance & Compliance" },
+                { id: "performance-optimization", title: "Performance & Optimization" },
+                { id: "data-retention", title: "Data Retention & Archival" },
+                { id: "reporting-layer", title: "Reporting & Consumption Layer" },
+                { id: "monitoring-observability", title: "Monitoring & Observability" },
+                { id: "design-patterns", title: "Best Practices & Design Patterns" },
+                { id: "troubleshooting", title: "Common Issues & Troubleshooting" },
+            ]},
+            { id: "cdp-migration", title: "CDP MIGRATION KNOWLEDGE BASE", icon: "ArrowRightCircle", children: [
+                { id: "migration-strategy", title: "Migration Planning & Strategy" },
+                { id: "hive-migration", title: "Hive Migration" },
+                { id: "impala-migration", title: "Impala Migration" },
+                { id: "spark-migration", title: "Spark Migration" },
+                { id: "hdfs-migration", title: "HDFS Migration" },
+                { id: "security-migration", title: "Security & Governance Migration" },
+                { id: "workflow-migration", title: "Workflow & Orchestration Migration" },
+                { id: "etl-integration", title: "Informatica & ETL Integration" },
+                { id: "post-migration", title: "Post-Migration Operations" },
+                { id: "validation-benchmarking", title: "Validation & Benchmarking" },
+            ]},
+            { id: "accelerators", title: "REUSABLE ACCELERATORS", icon: "Zap", children: [
+                { id: "etl-templates", title: "ETL Templates" },
+                { id: "val-framework", title: "Data Validation Framework" },
+                { id: "sql-library", title: "SQL Script Library" },
+                { id: "auto-scripts", title: "Automation Scripts" },
+                { id: "audit-framework", title: "Audit & Reconciliation Framework" },
+            ]},
+            { id: "troubleshooting-prod", title: "TROUBLESHOOTING & PRODUCTION ISSUES", icon: "AlertTriangle", children: [
+                { id: "hive-issues", title: "Hive Issues" },
+                { id: "spark-issues", title: "Spark Issues" },
+                { id: "etl-failures", title: "ETL Failures" },
+                { id: "data-issues", title: "Data Issues" },
+            ]},
+            { id: "onboarding", title: "PROJECT ONBOARDING KIT", icon: "UserPlus", children: [
+                { id: "arch-diagrams", title: "Architecture Diagrams" },
+                { id: "data-flow", title: "Data Flow" },
+                { id: "access-checklist", title: "Access Checklist" },
+                { id: "env-setup", title: "Environment Setup" },
+                { id: "runbooks", title: "Runbooks" },
+            ]},
+            { id: "metrics", title: "METRICS & INSIGHTS", icon: "TrendingUp" }
+        ];
+
+        const documents = {
+            "val-framework": [
+                { name: "Data Validation Framework Overview.pdf", type: "PDF", updated: "2024-03-10", size: "2.4 MB" },
+                { name: "Validation Rules Template.xlsx", type: "Excel", updated: "2024-03-12", size: "1.1 MB" },
+                { name: "DVF Implementation Guide.docx", type: "Doc", updated: "2024-03-05", size: "850 KB" }
+            ],
+            "etl-templates": [
+                { name: "Standard ETL Pattern.pdf", type: "PDF", updated: "2024-02-15", size: "1.8 MB" },
+                { name: "Informatica Mapping Template.xml", type: "Other", updated: "2024-02-20", size: "45 KB" }
+            ],
+            "troubleshooting": [
+                { name: "Common Issues & Fixes v2.pdf", type: "PDF", updated: "2024-03-01", size: "3.2 MB" },
+                { name: "Spark RCA Checklist.docx", type: "Doc", updated: "2024-03-08", size: "120 KB" }
+            ]
+        };
+
+        const featuredAccelerators = [
+            { id: "val-framework", title: "Data Validation Framework", description: "Standardized tool for verifying data integrity across platforms.", icon: "Shield" },
+            { id: "etl-templates", title: "ETL Templates", description: "Reusable Informatica and Spark templates for faster development.", icon: "Zap" },
+            { id: "troubleshooting", title: "Troubleshooting Guide", description: "Comprehensive library of known issues and resolution steps.", icon: "Search" },
+            { id: "onboarding", title: "Onboarding Kit", description: "Everything you need to get started with the CoE platform.", icon: "UserPlus" }
+        ];
+
+        // --- Components ---
+
+        // --- Error Boundary ---
+        class ErrorBoundary extends React.Component {
+            constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+            static getDerivedStateFromError(error) { return { hasError: true, error }; }
+            componentDidCatch(error, errorInfo) { console.error("Portal Crash:", error, errorInfo); }
+            render() {
+                if (this.state.hasError) {
+                    return (
+                        <div style={{ padding: '40px', textAlign: 'center', fontFamily: 'sans-serif' }}>
+                            <h2 style={{color: '#ef4444'}}>Application Error</h2>
+                            <p>The UI encountered an unexpected error during navigation.</p>
+                            <button 
+                                onClick={() => window.location.reload()} 
+                                style={{ padding: '10px 20px', backgroundColor: '#4f46e5', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', marginTop: '20px' }}
+                            >
+                                Reload Portal
+                            </button>
+                            <pre style={{ marginTop: '20px', fontSize: '12px', color: '#64748b', textAlign: 'left', background: '#f8fafc', padding: '15px' }}>
+                                {this.state.error && this.state.error.toString()}
+                            </pre>
+                        </div>
+                    );
+                }
+                return this.props.children;
+            }
+        }
+
+        const Icon = ({ name, size = 18, className = "" }) => {
+            if (!name) return null;
+            
+            // Map Lucide names to FontAwesome classes
+            const iconMap = {
+                'home': 'fa-house',
+                'bookopen': 'fa-book-open',
+                'server': 'fa-server',
+                'layers': 'fa-layer-group',
+                'arrowrightcircle': 'fa-circle-chevron-right',
+                'checkcircle': 'fa-circle-check',
+                'barchart': 'fa-chart-column',
+                'zap': 'fa-bolt-lightning',
+                'alerttriangle': 'fa-triangle-exclamation',
+                'userplus': 'fa-user-plus',
+                'shieldcheck': 'fa-shield-halved',
+                'graduationcap': 'fa-graduation-cap',
+                'trendingup': 'fa-arrow-trend-up',
+                'chevron-right': 'fa-chevron-right',
+                'chevron-down': 'fa-chevron-down',
+                'search': 'fa-magnifying-glass',
+                'bell': 'fa-bell',
+                'menu': 'fa-bars',
+                'activity': 'fa-chart-line',
+                'files': 'fa-folder-tree',
+                'file-text': 'fa-file-lines',
+                'folder': 'fa-folder',
+                'external-link': 'fa-up-right-from-square',
+                'shield': 'fa-shield',
+                'alert-circle': 'fa-circle-exclamation'
+            };
+
+            const cleanName = name.toLowerCase().replace(/-/g, '');
+            const faClass = iconMap[cleanName] || iconMap[name.toLowerCase()] || 'fa-file';
+            
+            return (
+                <i 
+                    className={`fa-solid ${faClass} ${className}`} 
+                    style={{ 
+                        fontSize: `${size}px`, 
+                        width: `${size}px`,
+                        height: `${size}px`,
+                        display: 'inline-flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center' 
+                    }}
+                ></i>
+            );
+        };
+
+        const TreeNode = ({ node, activeId, onSelect, level = 0 }) => {
+            const [expanded, setExpanded] = useState(false);
+            const hasChildren = node.children && node.children.length > 0;
+            const isActive = activeId === node.id;
+
+            return (
+                <div className="tree-item">
+                    <div className={`tree-node ${isActive ? 'active' : ''}`} 
+                         onClick={(e) => { e.stopPropagation(); if(hasChildren) setExpanded(!expanded); onSelect(node.id); }}
+                         style={{ paddingLeft: `${16 + level * 16}px` }}>
+                        <div className="tree-node-icon"><Icon name={node.icon || (hasChildren ? 'folder' : 'file-text')} size={16} /></div>
+                        <span className="tree-node-label">{node.title}</span>
+                        {hasChildren && <Icon name="chevron-right" size={14} className={`tree-node-arrow ${expanded ? 'expanded' : ''}`} />}
+                    </div>
+                    {hasChildren && expanded && (
+                        <div className="tree-children">
+                            {node.children.map(child => <TreeNode key={child.id} node={child} activeId={activeId} onSelect={onSelect} level={level + 1} />)}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const Sidebar = ({ taxonomy, activeId, onSelect, collapsed }) => (
+            <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+                <div className="sidebar-header">
+                    <Icon name="activity" size={24} style={{color: 'var(--accent)'}} />
+                    <span className="logo-text">CoE Portal</span>
+                </div>
+                <div className="sidebar-content">
+                    {taxonomy.map(node => <TreeNode key={node.id} node={node} activeId={activeId} onSelect={onSelect} />)}
+                </div>
+            </aside>
+        );
+
+        const Navbar = ({ onToggleSidebar }) => (
+            <nav className="navbar">
+                <div className="nav-icon-btn" onClick={onToggleSidebar}><Icon name="menu" /></div>
+                <div className="search-bar"><Icon name="search" size={16} /><input type="text" placeholder="Search knowledge base..." /></div>
+                <div className="nav-actions"><div className="nav-icon-btn"><Icon name="bell" /></div><div className="user-profile"><div className="avatar">SA</div><Icon name="chevron-down" size={14} /></div></div>
+            </nav>
+        );
+
+        const Dashboard = ({ onSelect }) => (
+            <div className="dashboard-view">
+                <header className="hero"><h1>CoE Portfolio</h1><p>Enterprise Data Engineering & Strategy Hub</p></header>
+                <div className="stats-grid">
+                    {featuredAccelerators.map(item => (
+                        <div key={item.id} className="card tile" onClick={() => onSelect(item.id)}>
+                            <div className="tile-icon"><Icon name={item.icon} size={24} /></div>
+                            <h3>{item.title}</h3><p>{item.description}</p>
+                        </div>
+                    ))}
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+                    <section><h3 className="section-title"><Icon name="link" /> Quick Links</h3><div className="card">
+                        <ul style={{ listStyle: 'none' }}>
+                            {['Azure Data Factory', 'Cloudera Manager', 'Power BI Metrics'].map(link => (
+                                <li key={link} style={{ padding: '8px 0', borderBottom: '1px solid var(--border)', cursor: 'pointer', color: 'var(--accent)' }}><Icon name="external-link" size={14} style={{ marginRight: '8px' }} />{link}</li>
+                            ))}
+                        </ul>
+                    </div></section>
+                    <section><h3 className="section-title"><Icon name="clock" /> Recent Articles</h3><div className="card">
+                        <div style={{marginBottom: '10px'}}><small style={{color: 'var(--text-muted)'}}>24 MAR 2024</small><p style={{fontWeight: '600'}}>Hive vs Impala Performance Patterns</p></div>
+                        <div><small style={{color: 'var(--text-muted)'}}>20 MAR 2024</small><p style={{fontWeight: '600'}}>Spark Memory Management Tuning</p></div>
+                    </div></section>
+                </div>
+            </div>
+        );
+
+        const ContentPage = ({ nodeId }) => {
+            const findNodePath = (nodes, id, path = []) => {
+                for (const node of nodes) {
+                    if (node.id === id) return [...path, node.title];
+                    if (node.children) {
+                        const childPath = findNodePath(node.children, id, [...path, node.title]);
+                        if (childPath) return childPath;
+                    }
+                }
+                return null;
+            };
+
+            const path = useMemo(() => findNodePath(taxonomy, nodeId), [nodeId]);
+            const docs = documents[nodeId] || [];
+
+            if (!path) {
+                return (
+                    <div className="content-page" style={{ padding: '20px', color: 'var(--text-muted)' }}>
+                        <Icon name="alert-circle" size={32} />
+                        <h3 style={{marginTop: '10px'}}>Section Not Found</h3>
+                        <p>This category matches no known records or is currently empty.</p>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="content-page">
+                    <div className="breadcrumb">
+                        <span>Core</span>
+                        <Icon name="chevron-right" size={12} />
+                        {path.map((name, idx) => (
+                            <React.Fragment key={`bc-${name}-${idx}`}>
+                                <span className={idx === path.length - 1 ? 'current' : ''}>{name}</span>
+                                {idx < path.length - 1 && <Icon name="chevron-right" size={12} />}
+                            </React.Fragment>
+                        ))}
+                    </div>
+
+                    <header className="page-header">
+                        <h2>{path[path.length - 1]}</h2>
+                        <p>Reference materials and technical documentation for this CoE pillar.</p>
+                    </header>
+
+                    <h3 className="section-title"><Icon name="files" /> Documents</h3>
+                    <div className="doc-list">
+                        {docs.length > 0 ? docs.map((doc) => (
+                            <div key={doc.name} className="doc-item">
+                                <div className="doc-info">
+                                    <Icon name={doc.type === 'PDF' ? 'file-text' : 'file'} className="doc-type-icon" />
+                                    <div>
+                                        <span className="doc-name">{doc.name}</span>
+                                        <span className="doc-meta">{doc.type} • {doc.size}</span>
+                                    </div>
+                                </div>
+                                <button className="btn btn-outline" onClick={() => alert(`Opening ${doc.name} from OneDrive...`)}>Open</button>
+                            </div>
+                        )) : <p>No documents found for this section.</p>}
+                    </div>
+
+                    <div className="related-links" style={{marginTop: '40px'}}>
+                        <h3 className="section-title"><Icon name="link" /> Related Resources</h3>
+                        <div className="card">
+                            <p style={{color: 'var(--accent)', cursor: 'pointer'}}>Internal Knowledge Base Search</p>
+                            <hr style={{margin: '12px 0', opacity: 0.1}} />
+                            <p style={{color: 'var(--accent)', cursor: 'pointer'}}>Data Governance Portal</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [activeId, setActiveId] = useState('home');
+            const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+            return (
+                <div className="app-container">
+                    <Sidebar taxonomy={taxonomy} activeId={activeId} onSelect={setActiveId} collapsed={sidebarCollapsed} />
+                    <main className="main-wrapper">
+                        <Navbar onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
+                        <div className="content-area">
+                            {activeId === 'home' ? <Dashboard onSelect={setActiveId} /> : <ContentPage nodeId={activeId} />}
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            <ErrorBoundary>
+                <App />
+            </ErrorBoundary>
+        );
+    </script>
+</body>
+</html>
