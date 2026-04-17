@@ -247,8 +247,8 @@
         const Sidebar = ({ taxonomy, activeId, onSelect, collapsed }) => (
             <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
                 <div className="sidebar-header">
-                    <Icon name="activity" size={24} style={{color: 'var(--accent)'}} />
-                    <span className="logo-text">CoE Portal</span>
+                    <img src="logo.png" className="sidebar-brand-img" alt="Logo" onError={(e) => e.target.style.display='none'} />
+                    {!collapsed && <span className="logo-text">Smart Analytica</span>}
                 </div>
                 <div className="sidebar-content">
                     {taxonomy.map(node => <TreeNode key={node.id} node={node} activeId={activeId} onSelect={onSelect} />)}
@@ -384,13 +384,6 @@
 
             return (
                 <div className="content-page">
-                    <div className="sidebar-brand">
-                        <img src="logo.png" alt="Logo" className="sidebar-logo" />
-                        <div className="brand-text">
-                            <span className="brand-main">Smart</span>
-                            <span className="brand-sub">Analytica</span>
-                        </div>
-                    </div>
                     <div className="breadcrumb">
                         <span>Core</span>
                         <Icon name="chevron-right" size={12} />
@@ -483,16 +476,46 @@
 
         const App = () => {
             const [activeId, setActiveId] = useState('home');
-            const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+            const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 768);
             const [theme, setTheme] = useState('dark');
+
+            // Handle responsive sidebar state
+            useEffect(() => {
+                const handleResize = () => {
+                    if (window.innerWidth >= 768) {
+                        setSidebarCollapsed(false);
+                    } else {
+                        setSidebarCollapsed(true);
+                    }
+                };
+                window.addEventListener('resize', handleResize);
+                return () => window.removeEventListener('resize', handleResize);
+            }, []);
 
             useEffect(() => {
                 document.body.setAttribute('data-theme', theme);
             }, [theme]);
 
+            const handleNavigate = (id) => {
+                setActiveId(id);
+                // Auto-close sidebar on mobile after selection
+                if (window.innerWidth < 768) {
+                    setSidebarCollapsed(true);
+                }
+            };
+
             return (
                 <div className="app-container">
-                    <Sidebar taxonomy={taxonomy} activeId={activeId} onSelect={setActiveId} collapsed={sidebarCollapsed} />
+                    <div 
+                        className={`sidebar-overlay ${!sidebarCollapsed && window.innerWidth < 768 ? 'visible' : ''}`} 
+                        onClick={() => setSidebarCollapsed(true)} 
+                    />
+                    <Sidebar 
+                        taxonomy={taxonomy} 
+                        activeId={activeId} 
+                        onSelect={handleNavigate} 
+                        collapsed={sidebarCollapsed} 
+                    />
                     <main className="main-wrapper">
                         <Navbar 
                             onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} 
@@ -500,7 +523,7 @@
                             onToggleTheme={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')} 
                         />
                         <div className="content-area">
-                            {activeId === 'home' ? <Dashboard onSelect={setActiveId} /> : <ContentPage nodeId={activeId} />}
+                            {activeId === 'home' ? <Dashboard onSelect={handleNavigate} /> : <ContentPage nodeId={activeId} />}
                         </div>
                     </main>
                 </div>

@@ -293,39 +293,37 @@ body {
   width: 100%;
 }
 
-/* Brand & Logo Styling */
-.sidebar-brand {
+.sidebar-header {
+  height: 64px;
   display: flex;
   align-items: center;
+  padding: 0 20px;
   gap: 12px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
   border-bottom: 1px solid var(--border);
 }
 
-.sidebar-logo {
-  height: 32px;
-  width: auto;
+.sidebar-brand-img {
+  height: 28px;
+  width: 28px;
   object-fit: contain;
+  transition: all 0.3s ease;
 }
 
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
+.sidebar.collapsed .sidebar-header {
+  padding: 0;
+  justify-content: center;
 }
 
-.brand-main {
+.sidebar.collapsed .sidebar-brand-img {
+  height: 32px;
+  width: 32px;
+}
+
+.logo-text {
   font-weight: 700;
   font-size: 1.1rem;
+  white-space: nowrap;
   color: var(--accent);
-}
-
-.brand-sub {
-  font-weight: 500;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  letter-spacing: 0.5px;
 }
 
 .hero-brand {
@@ -359,8 +357,80 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--border-radius);
   padding: 24px;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-base);
+/* --- Responsive Design (Mobile First / Drawer Pattern) --- */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 280px;
+    --navbar-height: 60px;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(0); /* Default when sidebar is NOT collapsed */
+    box-shadow: 20px 0 50px rgba(0,0,0,0.2);
+    width: var(--sidebar-width);
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+    width: var(--sidebar-width); /* Maintain width for animation */
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .search-bar {
+    display: none; /* Hide search on mobile header to save space */
+  }
+
+  .content-area {
+    padding: 20px 16px;
+  }
+
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+
+  /* Overlay / Backdrop */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .doc-item {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .doc-item .btn {
+    width: 100%;
+  }
+}
   position: relative;
   overflow: hidden;
 }

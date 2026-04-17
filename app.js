@@ -25,8 +25,8 @@ const TreeNode = ({ node, activeId, onSelect, level = 0 }) => {
 
     return (
         <div className="tree-item">
-            <div 
-                className={`tree-node ${isActive ? 'active' : ''}`} 
+            <div
+                className={`tree-node ${isActive ? 'active' : ''}`}
                 onClick={handleClick}
                 style={{ paddingLeft: `${16 + level * 16}px` }}
             >
@@ -35,22 +35,22 @@ const TreeNode = ({ node, activeId, onSelect, level = 0 }) => {
                 </div>
                 <span className="tree-node-label">{node.title}</span>
                 {hasChildren && (
-                    <Icon 
-                        name="chevron-right" 
-                        size={14} 
-                        className={`tree-node-arrow ${expanded ? 'expanded' : ''}`} 
+                    <Icon
+                        name="chevron-right"
+                        size={14}
+                        className={`tree-node-arrow ${expanded ? 'expanded' : ''}`}
                     />
                 )}
             </div>
             {hasChildren && expanded && (
                 <div className="tree-children">
                     {node.children.map(child => (
-                        <TreeNode 
-                            key={child.id} 
-                            node={child} 
-                            activeId={activeId} 
-                            onSelect={onSelect} 
-                            level={level + 1} 
+                        <TreeNode
+                            key={child.id}
+                            node={child}
+                            activeId={activeId}
+                            onSelect={onSelect}
+                            level={level + 1}
                         />
                     ))}
                 </div>
@@ -68,11 +68,11 @@ const Sidebar = ({ taxonomy, activeId, onSelect, collapsed, toggleCollapsed }) =
             </div>
             <div className="sidebar-content">
                 {taxonomy.map(node => (
-                    <TreeNode 
-                        key={node.id} 
-                        node={node} 
-                        activeId={activeId} 
-                        onSelect={onSelect} 
+                    <TreeNode
+                        key={node.id}
+                        node={node}
+                        activeId={activeId}
+                        onSelect={onSelect}
                     />
                 ))}
             </div>
@@ -88,7 +88,7 @@ const Navbar = ({ onToggleSidebar }) => {
                     <Icon name="menu" />
                 </div>
             </div>
-            
+
             <div className="search-bar">
                 <Icon name="search" size={16} />
                 <input type="text" placeholder="Search knowledge base..." />
@@ -240,9 +240,9 @@ const ContentPage = ({ nodeId, taxonomy }) => {
             <div className="related-links">
                 <h3 className="section-title"><Icon name="link" /> Related Resources</h3>
                 <div className="card">
-                    <p style={{color: 'var(--accent)', cursor: 'pointer'}}>Internal KT Session Recording - Mar 2024</p>
-                    <hr style={{margin: '12px 0', opacity: 0.1}} />
-                    <p style={{color: 'var(--accent)', cursor: 'pointer'}}>External Microsoft Tech Docs: Azure Data Factory</p>
+                    <p style={{ color: 'var(--accent)', cursor: 'pointer' }}>Internal KT Session Recording - Mar 2024</p>
+                    <hr style={{ margin: '12px 0', opacity: 0.1 }} />
+                    <p style={{ color: 'var(--accent)', cursor: 'pointer' }}>External Microsoft Tech Docs: Azure Data Factory</p>
                 </div>
             </div>
         </div>
@@ -271,17 +271,17 @@ const App = () => {
 
     return (
         <div className="app-container">
-            <Sidebar 
-                taxonomy={taxonomy} 
-                activeId={activeId} 
+            <Sidebar
+                taxonomy={taxonomy}
+                activeId={activeId}
                 onSelect={handleNavigate}
                 collapsed={sidebarCollapsed}
                 toggleCollapsed={() => setSidebarCollapsed(!sidebarCollapsed)}
             />
-            
+
             <main className="main-wrapper">
                 <Navbar onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
-                
+
                 <div className="content-area">
                     {activeId === 'home' ? (
                         <Dashboard onNavigate={handleNavigate} />
