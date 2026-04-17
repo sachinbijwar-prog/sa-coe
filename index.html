@@ -90,18 +90,49 @@
         ];
 
         const documents = {
+            "dwh-overview": [
+                { 
+                    name: "dwh_architectural_overview.xlsx", 
+                    type: "Excel", 
+                    updated: "2026-04-17", 
+                    lastModified: "2026-04-17T12:00:00Z",
+                    size: "8.5 KB",
+                    downloadPath: "downloads/dwh_architectural_overview.xlsx",
+                    summary: "Enterprise blueprint outlining the multi-layer storage architecture, compute fabric (Spark/Impala), and metadata management strategy. Defines the standard for data ingestion from legacy sources to the modern data lake."
+                }
+            ],
+            "data-modeling": [
+                { 
+                    name: "data_modeling_standards.xlsx", 
+                    type: "Excel", 
+                    updated: "2026-04-17", 
+                    lastModified: "2026-04-17T10:00:00Z",
+                    size: "8.5 KB",
+                    downloadPath: "downloads/data_modeling_standards.xlsx",
+                    summary: "Technical guidelines for robust schema design, including naming conventions, indexing strategies, and dimensional modeling patterns (Star/Snowflake). Ensures consistency across development teams."
+                }
+            ],
             "val-framework": [
-                { name: "Data Validation Framework Overview.pdf", type: "PDF", updated: "2024-03-10", size: "2.4 MB" },
+                { 
+                    name: "Data Validation Framework Overview.pdf", 
+                    type: "PDF", 
+                    updated: "2026-04-17", 
+                    lastModified: "2026-04-17T08:00:00Z",
+                    size: "2.4 MB",
+                    summary: "Strategic guide for cross-platform data integrity verification using automated quality gates."
+                },
                 { name: "Validation Rules Template.xlsx", type: "Excel", updated: "2024-03-12", size: "1.1 MB" },
                 { name: "DVF Implementation Guide.docx", type: "Doc", updated: "2024-03-05", size: "850 KB" }
             ],
             "etl-templates": [
-                { name: "Standard ETL Pattern.pdf", type: "PDF", updated: "2024-02-15", size: "1.8 MB" },
+                { 
+                    name: "Standard ETL Pattern.pdf", 
+                    type: "PDF", 
+                    updated: "2024-02-15", 
+                    size: "1.8 MB",
+                    summary: "Standardized templates for Informatica and Spark mapping developers to accelerate development cycles."
+                },
                 { name: "Informatica Mapping Template.xml", type: "Other", updated: "2024-02-20", size: "45 KB" }
-            ],
-            "troubleshooting": [
-                { name: "Common Issues & Fixes v2.pdf", type: "PDF", updated: "2024-03-01", size: "3.2 MB" },
-                { name: "Spark RCA Checklist.docx", type: "Doc", updated: "2024-03-08", size: "120 KB" }
             ]
         };
 
@@ -153,16 +184,6 @@
                 'arrowrightcircle': 'fa-circle-chevron-right',
                 'checkcircle': 'fa-circle-check',
                 'barchart': 'fa-chart-column',
-                'zap': 'fa-bolt-lightning',
-                'alerttriangle': 'fa-triangle-exclamation',
-                'userplus': 'fa-user-plus',
-                'shieldcheck': 'fa-shield-halved',
-                'graduationcap': 'fa-graduation-cap',
-                'trendingup': 'fa-arrow-trend-up',
-                'chevron-right': 'fa-chevron-right',
-                'chevron-down': 'fa-chevron-down',
-                'search': 'fa-magnifying-glass',
-                'bell': 'fa-bell',
                 'menu': 'fa-bars',
                 'activity': 'fa-chart-line',
                 'files': 'fa-folder-tree',
@@ -170,7 +191,13 @@
                 'folder': 'fa-folder',
                 'external-link': 'fa-up-right-from-square',
                 'shield': 'fa-shield',
-                'alert-circle': 'fa-circle-exclamation'
+                'alert-circle': 'fa-circle-exclamation',
+                'sun': 'fa-sun',
+                'moon': 'fa-moon',
+                'file-excel': 'fa-file-excel',
+                'file-pdf': 'fa-file-pdf',
+                'file-lines': 'fa-file-lines',
+                'copy': 'fa-copy'
             };
 
             const cleanName = name.toLowerCase().replace(/-/g, '');
@@ -205,9 +232,11 @@
                         <span className="tree-node-label">{node.title}</span>
                         {hasChildren && <Icon name="chevron-right" size={14} className={`tree-node-arrow ${expanded ? 'expanded' : ''}`} />}
                     </div>
-                    {hasChildren && expanded && (
-                        <div className="tree-children">
-                            {node.children.map(child => <TreeNode key={child.id} node={child} activeId={activeId} onSelect={onSelect} level={level + 1} />)}
+                    {hasChildren && (
+                        <div className={`tree-children-container ${expanded ? 'expanded' : ''}`}>
+                            <div className="tree-children">
+                                {node.children.map(child => <TreeNode key={child.id} node={child} activeId={activeId} onSelect={onSelect} level={level + 1} />)}
+                            </div>
                         </div>
                     )}
                 </div>
@@ -226,37 +255,90 @@
             </aside>
         );
 
-        const Navbar = ({ onToggleSidebar }) => (
+        const Navbar = ({ onToggleSidebar, theme, onToggleTheme }) => (
             <nav className="navbar">
                 <div className="nav-icon-btn" onClick={onToggleSidebar}><Icon name="menu" /></div>
                 <div className="search-bar"><Icon name="search" size={16} /><input type="text" placeholder="Search knowledge base..." /></div>
-                <div className="nav-actions"><div className="nav-icon-btn"><Icon name="bell" /></div><div className="user-profile"><div className="avatar">SA</div><Icon name="chevron-down" size={14} /></div></div>
+                <div className="nav-actions">
+                    <div className="theme-toggle" onClick={onToggleTheme}>
+                        <Icon name={theme === 'light' ? 'moon' : 'sun'} size={18} />
+                    </div>
+                    <div className="nav-icon-btn"><Icon name="bell" /></div>
+                    <div className="user-profile">
+                        <div className="avatar">SA</div>
+                        <span style={{fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)'}}>Sachin B.</span>
+                    </div>
+                </div>
             </nav>
         );
 
         const Dashboard = ({ onSelect }) => (
             <div className="dashboard-view">
-                <header className="hero"><h1>CoE Portfolio</h1><p>Enterprise Data Engineering & Strategy Hub</p></header>
+                <header className="hero">
+                    <h1>Enterprise CoE Portfolio</h1>
+                    <p>Intelligence & Data Engineering Excellence Hub</p>
+                </header>
                 <div className="stats-grid">
                     {featuredAccelerators.map(item => (
                         <div key={item.id} className="card tile" onClick={() => onSelect(item.id)}>
-                            <div className="tile-icon"><Icon name={item.icon} size={24} /></div>
-                            <h3>{item.title}</h3><p>{item.description}</p>
+                            <div className="tile-icon"><Icon name={item.icon} size={22} /></div>
+                            <h3>{item.title}</h3>
+                            <p>{item.description}</p>
+                            <div style={{marginTop: '20px', fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px'}}>
+                                VIEW DETAILS <Icon name="chevron-right" size={12} />
+                            </div>
                         </div>
                     ))}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-                    <section><h3 className="section-title"><Icon name="link" /> Quick Links</h3><div className="card">
-                        <ul style={{ listStyle: 'none' }}>
-                            {['Azure Data Factory', 'Cloudera Manager', 'Power BI Metrics'].map(link => (
-                                <li key={link} style={{ padding: '8px 0', borderBottom: '1px solid var(--border)', cursor: 'pointer', color: 'var(--accent)' }}><Icon name="external-link" size={14} style={{ marginRight: '8px' }} />{link}</li>
-                            ))}
-                        </ul>
-                    </div></section>
-                    <section><h3 className="section-title"><Icon name="clock" /> Recent Articles</h3><div className="card">
-                        <div style={{marginBottom: '10px'}}><small style={{color: 'var(--text-muted)'}}>24 MAR 2024</small><p style={{fontWeight: '600'}}>Hive vs Impala Performance Patterns</p></div>
-                        <div><small style={{color: 'var(--text-muted)'}}>20 MAR 2024</small><p style={{fontWeight: '600'}}>Spark Memory Management Tuning</p></div>
-                    </div></section>
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.5fr) minmax(0, 1fr)', gap: '40px' }}>
+                    <section>
+                        <h3 className="section-title"><Icon name="link" /> Ecosystem Quick Links</h3>
+                        <div className="card" style={{padding: '0'}}>
+                            <ul style={{ listStyle: 'none' }}>
+                                {[
+                                    { name: 'Azure Data Factory Portal', type: 'Platform' },
+                                    { name: 'Cloudera Manager Dashboard', type: 'Operations' },
+                                    { name: 'Power BI Metrics Hub', type: 'Analytics' }
+                                ].map((link, idx) => (
+                                    <li key={link.name} style={{ 
+                                        padding: '16px 24px', 
+                                        borderBottom: idx === 2 ? 'none' : '1px solid var(--border)', 
+                                        display: 'flex', 
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        cursor: 'pointer' 
+                                    }}>
+                                        <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                                            <Icon name="external-link" size={14} style={{ color: 'var(--accent)' }} />
+                                            <span style={{fontWeight: 600}}>{link.name}</span>
+                                        </div>
+                                        <span style={{fontSize: '0.7rem', background: 'var(--bg-main)', padding: '2px 8px', borderRadius: '4px', color: 'var(--text-muted)'}}>{link.type}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+                        <h3 className="section-title"><Icon name="clock" /> Recent Publications</h3>
+                        <div className="doc-list">
+                            <div className="card" style={{padding: '20px'}}>
+                                <div style={{marginBottom: '16px', display: 'flex', gap: '16px'}}>
+                                    <div style={{width: '4px', background: 'var(--accent)', borderRadius: '2px'}}></div>
+                                    <div>
+                                        <small style={{color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.7rem'}}>MAR 24, 2024 • ARCHITECTURE</small>
+                                        <p style={{fontWeight: '700', marginTop: '4px'}}>Hive vs Impala Performance Patterns</p>
+                                    </div>
+                                </div>
+                                <div style={{display: 'flex', gap: '16px'}}>
+                                    <div style={{width: '4px', background: 'var(--border)', borderRadius: '2px'}}></div>
+                                    <div>
+                                        <small style={{color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.7rem'}}>MAR 20, 2024 • OPTIMIZATION</small>
+                                        <p style={{fontWeight: '700', marginTop: '4px'}}>Spark Memory Management Tuning</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         );
@@ -301,23 +383,69 @@
 
                     <header className="page-header">
                         <h2>{path[path.length - 1]}</h2>
-                        <p>Reference materials and technical documentation for this CoE pillar.</p>
+                        <p style={{fontSize: '1.1rem', maxWidth: '800px'}}>
+                            {docs.length > 0 && docs[0].summary 
+                                ? docs[0].summary 
+                                : `Access high-authority standards, patterns, and architectural blueprints for the ${path[path.length - 1]} pillar.`
+                            }
+                        </p>
                     </header>
 
-                    <h3 className="section-title"><Icon name="files" /> Documents</h3>
+                    <h3 className="section-title"><Icon name="files" /> Enterprise Documents</h3>
                     <div className="doc-list">
-                        {docs.length > 0 ? docs.map((doc) => (
-                            <div key={doc.name} className="doc-item">
-                                <div className="doc-info">
-                                    <Icon name={doc.type === 'PDF' ? 'file-text' : 'file'} className="doc-type-icon" />
-                                    <div>
-                                        <span className="doc-name">{doc.name}</span>
-                                        <span className="doc-meta">{doc.type} • {doc.size}</span>
+                        {docs.length > 0 ? docs.map((doc) => {
+                            const getRelativeTime = (isoString) => {
+                                if (!isoString) return doc.updated || 'Recently';
+                                try {
+                                    const diff = new Date() - new Date(isoString);
+                                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                                    if (hours < 1) return 'Just now';
+                                    if (hours < 24) return `Updated ${hours}h ago`;
+                                    return `Updated ${Math.floor(hours / 24)}d ago`;
+                                } catch (e) { return doc.updated; }
+                            };
+
+                            return (
+                                <div key={doc.name} className="doc-item" style={{alignItems: 'flex-start'}}>
+                                    <div className="doc-info" style={{alignItems: 'flex-start'}}>
+                                        <div className="doc-type-icon" style={{marginTop: '4px'}}>
+                                            <Icon name={doc.type === 'Excel' ? 'file-excel' : (doc.type === 'PDF' ? 'file-pdf' : 'file-lines')} />
+                                        </div>
+                                        <div style={{flex: 1}}>
+                                            <span className="doc-name">{doc.name}</span>
+                                            <div style={{display: 'flex', gap: '12px', alignItems: 'center', marginTop: '8px'}}>
+                                                <span className="doc-meta" style={{fontSize: '0.75rem'}}>{doc.type} • {doc.size}</span>
+                                                <span className="doc-meta" style={{fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600}}>
+                                                    {getRelativeTime(doc.lastModified)}
+                                                </span>
+                                                {doc.downloadPath && (
+                                                    <span style={{fontSize: '0.7rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600}}>
+                                                        <Icon name="check-circle" size={10} /> Sync with OneDrive
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style={{display: 'flex', gap: '8px', flexShrink: 0}}>
+                                        {doc.downloadPath ? (
+                                            <a 
+                                                href={doc.downloadPath} 
+                                                download={doc.name}
+                                                className="btn btn-primary"
+                                                style={{textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px'}}
+                                            >
+                                                <Icon name="download" size={14} /> Download
+                                            </a>
+                                        ) : (
+                                            <button className="btn btn-outline" onClick={() => alert(`Opening Mock Document: ${doc.name}`)}>
+                                                Open
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
-                                <button className="btn btn-outline" onClick={() => alert(`Opening ${doc.name} from OneDrive...`)}>Open</button>
-                            </div>
-                        )) : <p>No documents found for this section.</p>}
+                            );
+                        }) : <p className="no-docs">No enterprise documents found for this section yet.</p>}
                     </div>
 
                     <div className="related-links" style={{marginTop: '40px'}}>
@@ -335,12 +463,21 @@
         const App = () => {
             const [activeId, setActiveId] = useState('home');
             const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+            const [theme, setTheme] = useState('light');
+
+            useEffect(() => {
+                document.body.setAttribute('data-theme', theme);
+            }, [theme]);
 
             return (
                 <div className="app-container">
                     <Sidebar taxonomy={taxonomy} activeId={activeId} onSelect={setActiveId} collapsed={sidebarCollapsed} />
                     <main className="main-wrapper">
-                        <Navbar onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} />
+                        <Navbar 
+                            onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} 
+                            theme={theme} 
+                            onToggleTheme={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')} 
+                        />
                         <div className="content-area">
                             {activeId === 'home' ? <Dashboard onSelect={setActiveId} /> : <ContentPage nodeId={activeId} />}
                         </div>
