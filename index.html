@@ -440,12 +440,20 @@
                     </div>
                 </div>
                 <div className="nav-actions">
-                    <div className="theme-toggle" onClick={onToggleTheme}>
+                    <div className="theme-toggle" onClick={onToggleTheme} title="Toggle Theme">
                         <Icon name={theme === 'light' ? 'moon' : 'sun'} size={18} />
                     </div>
                     <div className="user-profile">
                         <div className="avatar">SA</div>
-                        <span style={{fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)'}}>Sachin B.</span>
+                        <div style={{display: 'flex', flexDirection: 'column'}}>
+                            <span style={{fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)'}}>Sachin B.</span>
+                            <span 
+                                onClick={() => { sessionStorage.removeItem('coeAuth'); window.location.reload(); }} 
+                                style={{fontSize: '0.65rem', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', marginTop: '-2px'}}
+                            >
+                                <Icon name="logout" size={10} /> LOGOUT
+                            </span>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -478,18 +486,23 @@
                         <div className="card" style={{padding: '0'}}>
                             <ul style={{ listStyle: 'none' }}>
                                 {[
-                                    { name: 'Azure Data Factory Portal', type: 'Platform' },
-                                    { name: 'Cloudera Manager Dashboard', type: 'Operations' },
-                                    { name: 'Power BI Metrics Hub', type: 'Analytics' }
+                                    { name: 'Azure Data Factory Portal', type: 'Platform', url: 'https://adf.azure.com' },
+                                    { name: 'Cloudera Manager Dashboard', type: 'Operations', url: '#' },
+                                    { name: 'Power BI Metrics Hub', type: 'Analytics', url: 'https://app.powerbi.com' }
                                 ].map((link, idx) => (
-                                    <li key={link.name} style={{ 
-                                        padding: '16px 24px', 
-                                        borderBottom: idx === 2 ? 'none' : '1px solid var(--border)', 
-                                        display: 'flex', 
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        cursor: 'pointer' 
-                                    }}>
+                                    <li key={link.name} 
+                                        onClick={() => link.url !== '#' && window.open(link.url, '_blank')}
+                                        className="quick-link-item"
+                                        style={{ 
+                                            padding: '16px 24px', 
+                                            borderBottom: idx === 2 ? 'none' : '1px solid var(--border)', 
+                                            display: 'flex', 
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            cursor: 'pointer',
+                                            transition: 'background 0.2s ease'
+                                        }}
+                                    >
                                         <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
                                             <Icon name="external-link" size={14} style={{ color: 'var(--accent)' }} />
                                             <span style={{fontWeight: 600}}>{link.name}</span>
@@ -503,15 +516,23 @@
                     <section>
                         <h3 className="section-title"><Icon name="clock" /> Recent Publications</h3>
                         <div className="doc-list">
-                            <div className="card" style={{padding: '20px'}}>
-                                <div style={{marginBottom: '16px', display: 'flex', gap: '16px'}}>
+                            <div className="card" style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px'}}>
+                                <div 
+                                    className="publication-item"
+                                    onClick={() => onSelect('hive-impala-perf')}
+                                    style={{display: 'flex', gap: '16px', cursor: 'pointer', transition: 'transform 0.2s ease'}}
+                                >
                                     <div style={{width: '4px', background: 'var(--accent)', borderRadius: '2px'}}></div>
                                     <div>
                                         <small style={{color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.7rem'}}>MAR 24, 2024 • ARCHITECTURE</small>
                                         <p style={{fontWeight: '700', marginTop: '4px'}}>Hive vs Impala Performance Patterns</p>
                                     </div>
                                 </div>
-                                <div style={{display: 'flex', gap: '16px'}}>
+                                <div 
+                                    className="publication-item"
+                                    onClick={() => onSelect('spark-opt')}
+                                    style={{display: 'flex', gap: '16px', cursor: 'pointer', transition: 'transform 0.2s ease'}}
+                                >
                                     <div style={{width: '4px', background: 'var(--border)', borderRadius: '2px'}}></div>
                                     <div>
                                         <small style={{color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.7rem'}}>MAR 20, 2024 • OPTIMIZATION</small>
@@ -652,12 +673,93 @@
             );
         };
 
+        const StartPage = ({ onEnter }) => {
+            const [isExiting, setIsExiting] = useState(false);
+            const [empId, setEmpId] = useState('');
+            const [accessCode, setAccessCode] = useState('');
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                setIsExiting(true);
+                sessionStorage.setItem('coeAuth', 'true');
+                setTimeout(() => onEnter(), 800); // Match CSS transition
+            };
+
+            const stats = [
+                { value: "500+", label: "Assets" },
+                { value: "24", label: "Frameworks" },
+                { value: "8", label: "Core Pillars" }
+            ];
+
+            return (
+                <div className={`start-page ${isExiting ? 'fade-out' : ''}`}>
+                    <div className="login-card">
+                        <div style={{ marginBottom: '24px' }}>
+                            <div className="avatar" style={{ width: '60px', height: '60px', fontSize: '1.5rem', margin: '0 auto 16px' }}>SA</div>
+                            <h2>Centre of Excellence</h2>
+                            <p>Smart Analytica Knowledge Hub</p>
+                        </div>
+
+                        <form className="login-form" onSubmit={handleLogin}>
+                            <div className="login-input-group">
+                                <label>Employee ID</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Enter your ID..." 
+                                    value={empId}
+                                    onChange={(e) => setEmpId(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="login-input-group" style={{ marginBottom: '8px' }}>
+                                <label>Access Code</label>
+                                <input 
+                                    type="password" 
+                                    placeholder="••••••••" 
+                                    value={accessCode}
+                                    onChange={(e) => setAccessCode(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <button type="submit" className="login-btn">
+                                Authenticate & Enter Portal <Icon name="arrow-right" size={16} />
+                            </button>
+                        </form>
+                    </div>
+
+                    <div className="start-stats-row">
+                        {stats.map(stat => (
+                            <div key={stat.label} className="start-stat-item">
+                                <span className="start-stat-value">{stat.value}</span>
+                                <span className="start-stat-label">{stat.label}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div style={{ position: 'absolute', bottom: '40px', color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', fontWeight: 600 }}>
+                        POWERED BY SMART ANALYTICA AI ENGINE
+                    </div>
+                </div>
+            );
+        };
+
         const App = () => {
-            const [activeId, setActiveId] = useState('home');
+            const [authorized, setAuthorized] = useState(sessionStorage.getItem('coeAuth') === 'true');
+            const [activeId, setActiveId] = useState(window.location.hash.replace('#/', '') || 'home');
             const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 768);
             const [theme, setTheme] = useState('dark');
             const [searchQuery, setSearchQuery] = useState('');
             const [searchResults, setSearchResults] = useState([]);
+
+            // Handle browser history (Back/Forward)
+            useEffect(() => {
+                const handleHashChange = () => {
+                    const hashId = window.location.hash.replace('#/', '') || 'home';
+                    setActiveId(hashId);
+                };
+                window.addEventListener('hashchange', handleHashChange);
+                return () => window.removeEventListener('hashchange', handleHashChange);
+            }, []);
 
             // Handle responsive sidebar state
             useEffect(() => {
@@ -677,7 +779,7 @@
             }, [theme]);
 
             const handleNavigate = (id) => {
-                setActiveId(id);
+                window.location.hash = `#/${id}`;
                 setSearchQuery('');
                 setSearchResults([]);
                 // Auto-close sidebar on mobile after selection
@@ -690,6 +792,10 @@
                 setSearchQuery(query);
                 setSearchResults(searchData(query));
             };
+
+            if (!authorized) {
+                return <StartPage onEnter={() => setAuthorized(true)} />;
+            }
 
             return (
                 <div className="app-container">
