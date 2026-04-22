@@ -66,6 +66,13 @@
                 { id: "post-migration", title: "Post-Migration Operations" },
                 { id: "validation-benchmarking", title: "Validation & Benchmarking" },
             ]},
+            { id: "best-practices", title: "PLATFORM BEST PRACTICES", icon: "CheckCircle", children: [
+                { id: "arch-bp", title: "Architecture Best Practices" },
+                { id: "hive-impala-perf", title: "Hive & Impala Performance" },
+                { id: "spark-opt", title: "Spark Optimization" },
+                { id: "security-compliance", title: "Security & Compliance" },
+                { id: "cost-opt", title: "Performance & Cost Optimization" }
+            ]},
             { id: "accelerators", title: "REUSABLE ACCELERATORS", icon: "Zap", children: [
                 { id: "etl-templates", title: "ETL Templates" },
                 { id: "val-framework", title: "Data Validation Framework" },
@@ -85,6 +92,16 @@
                 { id: "access-checklist", title: "Access Checklist" },
                 { id: "env-setup", title: "Environment Setup" },
                 { id: "runbooks", title: "Runbooks" },
+            ]},
+            { id: "gov-quality", title: "GOVERNANCE & QUALITY", icon: "ShieldCheck", children: [
+                { id: "code-review", title: "Code Review Checklist" },
+                { id: "dq-rules", title: "Data Quality Rules" },
+                { id: "val-standards", title: "Validation Standards" }
+            ]},
+            { id: "learning-hub", title: "LEARNING HUB", icon: "GraduationCap", children: [
+                { id: "internal-kt", title: "Internal KT" },
+                { id: "recorded-sessions", title: "Recorded Sessions" },
+                { id: "cert-guidance", title: "Certification Guidance" }
             ]},
             { id: "metrics", title: "METRICS & INSIGHTS", icon: "TrendingUp" }
         ];
@@ -139,11 +156,152 @@
         const featuredAccelerators = [
             { id: "val-framework", title: "Data Validation Framework", description: "Standardized tool for verifying data integrity across platforms.", icon: "Shield" },
             { id: "etl-templates", title: "ETL Templates", description: "Reusable Informatica and Spark templates for faster development.", icon: "Zap" },
-            { id: "troubleshooting", title: "Troubleshooting Guide", description: "Comprehensive library of known issues and resolution steps.", icon: "Search" },
-            { id: "onboarding", title: "Onboarding Kit", description: "Everything you need to get started with the CoE platform.", icon: "UserPlus" }
+            { id: "troubleshooting-prod", title: "Troubleshooting Guide", description: "Comprehensive library of known issues and resolution steps.", icon: "Search" },
+            { id: "onboarding", title: "Onboarding Kit", description: "Everything you need to get started with the CoE platform.", icon: "UserPlus" },
+            { id: "dwh-arch", title: "Architecture Blueprints", description: "Standardized design patterns for scalable pipelines.", icon: "Layout" },
+            { id: "gov-quality", title: "Quality Dashboards", description: "Real-time visibility into data health and performance.", icon: "Activity" },
+            { id: "security-compliance", title: "Security Standards", description: "Protocols and best practices for secure data handling.", icon: "ShieldCheck" },
+            { id: "learning-hub", title: "Learning Center", description: "Curated training paths and certification resources.", icon: "GraduationCap" }
         ];
 
+        // --- Search Utilities ---
+        const flattenTaxonomy = (items, parent = null) => {
+            return items.reduce((acc, item) => {
+                const flatItem = { id: item.id, title: item.title, parent };
+                acc.push(flatItem);
+                if (item.children) {
+                    acc.push(...flattenTaxonomy(item.children, item.title));
+                }
+                return acc;
+            }, []);
+        };
+
+        const searchData = (query) => {
+            if (!query || query.length < 2) return [];
+            const lowQuery = query.toLowerCase();
+            const results = [];
+            const hasSymbols = /[_|-]/.test(query);
+
+            // Search Taxonomy (always search titles)
+            const flatTax = flattenTaxonomy(taxonomy);
+            flatTax.forEach(item => {
+                if (item.title.toLowerCase().includes(lowQuery) && item.id !== 'home') {
+                    results.push({ type: 'section', id: item.id, title: item.title, category: item.parent || 'General' });
+                }
+            });
+
+            // Search Documents
+            Object.keys(documents).forEach(sectionId => {
+                const sectionDocs = documents[sectionId];
+                sectionDocs.forEach(doc => {
+                    const matchName = doc.name.toLowerCase().includes(lowQuery);
+                    // Match summary only if no symbols are in query
+                    const matchSummary = !hasSymbols && doc.summary && doc.summary.toLowerCase().includes(lowQuery);
+                    
+                    if (matchName || matchSummary) {
+                        results.push({ type: 'document', id: sectionId, title: doc.name, category: 'Document' });
+                    }
+                });
+            });
+
+            return results.slice(0, 8); // Limit results
+        };
+
         // --- Components ---
+        const SearchDropdown = ({ results, onSelect, onClose }) => {
+            if (!results || results.length === 0) return null;
+
+            return (
+                <div className="search-dropdown">
+                    <div className="search-dropdown-header">SEARCH RESULTS</div>
+                    <div className="search-results-list">
+                        {results.map((result, idx) => (
+                            <div 
+                                key={`${result.id}-${idx}`} 
+                                className="search-result-item"
+                                onClick={() => { onSelect(result.id); onClose(); }}
+                            >
+                                <div className="result-icon">
+                                    <Icon name={result.type === 'section' ? 'folder' : 'file-text'} size={14} />
+                                </div>
+                                <div className="result-info">
+                                    <div className="result-title">{result.title}</div>
+                                    <div className="result-category">{result.category}</div>
+                                </div>
+                                <Icon name="chevron-right" size={12} className="result-arrow" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const NewsTicker = () => {
+            const [news, setNews] = useState([
+                { title: "ADVISORY: Cloudera Runtime Security Update for CVE-2024-XXXX", link: "https://my.cloudera.com/knowledge/Technical-Service-Bulletins-TSB" },
+                { title: "Cloudera Data Platform 7.3 Release Announcements", link: "https://community.cloudera.com/t5/Community-Announcements/bd-p/Announcements" },
+                { title: "TSB 2024-789: Critical Patch for Impala Query Engine", link: "https://my.cloudera.com/knowledge/Technical-Service-Bulletins-TSB" },
+                { title: "New Best Practices for CDP Private Cloud Data Services Migration", link: "https://community.cloudera.com/t5/Community-Announcements/bd-p/Announcements" }
+            ]);
+
+            useEffect(() => {
+                const fetchNews = async () => {
+                    try {
+                        const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcommunity.cloudera.com%2Fannouncements%2Frss');
+                        const data = await response.json();
+                        if (data.items && data.items.length > 0) {
+                            // Merge real news with advisory focus
+                            const items = data.items.map(item => ({
+                                title: item.title.toUpperCase().includes('ADVISORY') || item.title.toUpperCase().includes('TSB') 
+                                    ? `🔔 ADVISORY: ${item.title}` 
+                                    : item.title,
+                                link: item.link
+                            })).slice(0, 8);
+                            setNews(items);
+                        }
+                    } catch (error) {
+                        console.error('Failed to fetch Cloudera news, using fallbacks.', error);
+                    }
+                };
+                fetchNews();
+            }, []);
+
+            return (
+                <div className="news-ticker-bar">
+                    <div className="ticker-label">
+                        <Icon name="activity" size={12} />
+                        Live News
+                    </div>
+                    <div className="marquee-container">
+                        <div className="marquee-content">
+                            {news.map((item, idx) => (
+                                <a 
+                                    key={idx} 
+                                    href={item.link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="ticker-item"
+                                >
+                                    {item.title}
+                                </a>
+                            ))}
+                            {/* Duplicate for seamless loop */}
+                            {news.map((item, idx) => (
+                                <a 
+                                    key={`loop-${idx}`} 
+                                    href={item.link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="ticker-item"
+                                >
+                                    {item.title}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
 
         // --- Error Boundary ---
         class ErrorBoundary extends React.Component {
@@ -191,14 +349,20 @@
                 'file-text': 'fa-file-lines',
                 'folder': 'fa-folder',
                 'external-link': 'fa-up-right-from-square',
-                'shield': 'fa-shield',
+                'shield': 'fa-shield-halved',
                 'alert-circle': 'fa-circle-exclamation',
                 'sun': 'fa-sun',
                 'moon': 'fa-moon',
                 'file-excel': 'fa-file-excel',
                 'file-pdf': 'fa-file-pdf',
                 'file-lines': 'fa-file-lines',
-                'copy': 'fa-copy'
+                'copy': 'fa-copy',
+                'layout': 'fa-table-cells-large',
+                'shieldcheck': 'fa-shield-check',
+                'graduationcap': 'fa-graduation-cap',
+                'zap': 'fa-bolt-lightning',
+                'search': 'fa-magnifying-glass',
+                'userplus': 'fa-user-plus'
             };
 
             const cleanName = name.toLowerCase().replace(/-/g, '');
@@ -256,15 +420,29 @@
             </aside>
         );
 
-        const Navbar = ({ onToggleSidebar, theme, onToggleTheme }) => (
+        const Navbar = ({ onToggleSidebar, theme, onToggleTheme, searchQuery, onSearch }) => (
             <nav className="navbar">
-                <div className="nav-icon-btn" onClick={onToggleSidebar}><Icon name="menu" /></div>
-                <div className="search-bar"><Icon name="search" size={16} /><input type="text" placeholder="Search knowledge base..." /></div>
+                <div className="nav-left">
+                    <button className="nav-icon-btn" onClick={onToggleSidebar}>
+                        <Icon name="menu" size={20} />
+                    </button>
+                </div>
+                
+                <div className="search-container">
+                    <div className="search-bar">
+                        <Icon name="search" size={16} />
+                        <input 
+                            type="text" 
+                            placeholder="Search documents, sections..." 
+                            value={searchQuery}
+                            onChange={(e) => onSearch(e.target.value)}
+                        />
+                    </div>
+                </div>
                 <div className="nav-actions">
                     <div className="theme-toggle" onClick={onToggleTheme}>
                         <Icon name={theme === 'light' ? 'moon' : 'sun'} size={18} />
                     </div>
-                    <div className="nav-icon-btn"><Icon name="bell" /></div>
                     <div className="user-profile">
                         <div className="avatar">SA</div>
                         <span style={{fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)'}}>Sachin B.</span>
@@ -352,7 +530,7 @@
                     borderTop: '1px solid var(--border)',
                     marginTop: '40px'
                 }}>
-                    © 2024 Smart Analytica India Private Limited. All rights reserved.
+                    © 2026 Smart Analytica India Private Limited. All rights reserved.
                 </footer>
             </div>
         );
@@ -478,6 +656,8 @@
             const [activeId, setActiveId] = useState('home');
             const [sidebarCollapsed, setSidebarCollapsed] = useState(window.innerWidth < 768);
             const [theme, setTheme] = useState('dark');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [searchResults, setSearchResults] = useState([]);
 
             // Handle responsive sidebar state
             useEffect(() => {
@@ -498,10 +678,17 @@
 
             const handleNavigate = (id) => {
                 setActiveId(id);
+                setSearchQuery('');
+                setSearchResults([]);
                 // Auto-close sidebar on mobile after selection
                 if (window.innerWidth < 768) {
                     setSidebarCollapsed(true);
                 }
+            };
+
+            const handleSearchChange = (query) => {
+                setSearchQuery(query);
+                setSearchResults(searchData(query));
             };
 
             return (
@@ -521,10 +708,18 @@
                             onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} 
                             theme={theme} 
                             onToggleTheme={() => setTheme(prev => prev === 'light' ? 'dark' : 'light')} 
+                            searchQuery={searchQuery}
+                            onSearch={handleSearchChange}
                         />
-                        <div className="content-area">
+                        <div className="content-area" style={{ position: 'relative' }}>
+                            <SearchDropdown 
+                                results={searchResults} 
+                                onSelect={handleNavigate} 
+                                onClose={() => { setSearchQuery(''); setSearchResults([]); }}
+                            />
                             {activeId === 'home' ? <Dashboard onSelect={handleNavigate} /> : <ContentPage nodeId={activeId} />}
                         </div>
+                        <NewsTicker />
                     </main>
                 </div>
             );
