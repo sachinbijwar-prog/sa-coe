@@ -17,6 +17,10 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Markdown renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Pre-loaded document content (works on file:// and HTTP) -->
+    <script src="docs-data.js"></script>
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -107,46 +111,107 @@
         ];
 
         const documents = {
+            // --- APPLICATION KNOWLEDGE BASE ---
+            "informatica": [{
+                name: "Informatica Migration & Best Practices",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "12 KB",
+                viewPath: "docs/informatica.md",
+                summary: "Complete guide covering Informatica PowerCenter migration strategies, ETL best practices, performance optimization, and real-world enterprise use cases."
+            }],
+            // --- PLATFORM KNOWLEDGE BASE ---
+            "cloudera-overview": [{
+                name: "Cloudera Data Platform (CDP) Overview",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/cloudera-overview.md",
+                summary: "Architecture deep-dive of Cloudera Data Platform — covering SDX, Data Lake, FreeIPA, Ranger, and Atlas with implementation guidance for enterprise deployments."
+            }],
+            // --- DATA WAREHOUSE ARCHITECTURE ---
             "dwh-overview": [
-                { 
-                    name: "dwh_architectural_overview.xlsx", 
-                    type: "Excel", 
-                    updated: "2026-04-17", 
-                    lastModified: "2026-04-17T12:00:00Z",
-                    size: "8.5 KB",
+                {
+                    name: "DWH Architectural Overview",
+                    type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "14 KB",
+                    viewPath: "docs/dwh-overview.md",
+                    summary: "Enterprise blueprint outlining the multi-layer storage architecture, compute fabric (Spark/Impala), and metadata management strategy."
+                },
+                {
+                    name: "dwh_architectural_overview.xlsx",
+                    type: "Excel", updated: "2026-04-17", lastModified: "2026-04-17T12:00:00Z", size: "8.5 KB",
                     downloadPath: "downloads/dwh_architectural_overview.xlsx",
-                    summary: "Enterprise blueprint outlining the multi-layer storage architecture, compute fabric (Spark/Impala), and metadata management strategy. Defines the standard for data ingestion from legacy sources to the modern data lake."
+                    summary: "Quick-reference spreadsheet version of the DWH architecture blueprint."
                 }
             ],
             "data-modeling": [
-                { 
-                    name: "data_modeling_standards.xlsx", 
-                    type: "Excel", 
-                    updated: "2026-04-17", 
-                    lastModified: "2026-04-17T10:00:00Z",
-                    size: "8.5 KB",
+                {
+                    name: "Data Modeling Standards",
+                    type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "13 KB",
+                    viewPath: "docs/data-modeling.md",
+                    summary: "Technical guidelines for schema design: naming conventions, Star/Snowflake/Data Vault patterns, SCD types, and DDL standards for Hive & Impala."
+                },
+                {
+                    name: "data_modeling_standards.xlsx",
+                    type: "Excel", updated: "2026-04-17", lastModified: "2026-04-17T10:00:00Z", size: "8.5 KB",
                     downloadPath: "downloads/data_modeling_standards.xlsx",
-                    summary: "Technical guidelines for robust schema design, including naming conventions, indexing strategies, and dimensional modeling patterns (Star/Snowflake). Ensures consistency across development teams."
+                    summary: "Spreadsheet template for data modeling standards and naming conventions."
                 }
             ],
+            "data-ingestion": [{
+                name: "Data Ingestion Layer",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "15 KB",
+                viewPath: "docs/data-ingestion.md",
+                summary: "Comprehensive guide to ingestion patterns (Sqoop, Spark Streaming, NiFi), watermark management, audit logging, and idempotent design for enterprise data lakes."
+            }],
+            "etl-transformation": [{
+                name: "ETL/ELT Transformation Layer",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "14 KB",
+                viewPath: "docs/etl-transformation.md",
+                summary: "Standards for building transformation pipelines with Spark and Hive SQL — covering deduplication, SCD Type 2, audit columns, and performance best practices."
+            }],
+            "data-quality": [{
+                name: "Data Quality & Validation Framework",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "16 KB",
+                viewPath: "docs/data-quality.md",
+                summary: "End-to-end DQ framework covering the 7 dimensions of data quality, automated rule engine in PySpark, quarantine zone design, and reconciliation checks."
+            }],
+            // --- CDP MIGRATION ---
+            "migration-strategy": [{
+                name: "Migration Planning & Strategy",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "17 KB",
+                viewPath: "docs/migration-strategy.md",
+                summary: "Phased migration framework from CDH/HDP to CDP — covering assessment, DistCP replication, metastore migration, parallel validation, and zero-downtime cutover."
+            }],
+            "hive-migration": [{
+                name: "Hive Migration Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "16 KB",
+                viewPath: "docs/hive-migration.md",
+                summary: "Step-by-step Hive 1.x/2.x to Hive 3.x migration — reserved keyword fixes, ACID table management, metastore schema upgrade, and Hive Warehouse Connector setup."
+            }],
+            // --- PLATFORM BEST PRACTICES ---
+            "hive-impala-perf": [{
+                name: "Hive & Impala Performance Best Practices",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "15 KB",
+                viewPath: "docs/hive-impala-perf.md",
+                summary: "Deep-dive tuning guide for Hive (Tez, LLAP, vectorization) and Impala (COMPUTE STATS, runtime filters, caching) with real SQL examples and troubleshooting."
+            }],
+            "spark-opt": [{
+                name: "Spark Optimization Best Practices",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "16 KB",
+                viewPath: "docs/spark-opt.md",
+                summary: "Production Spark tuning — AQE, broadcast joins, skew handling with salting, memory configuration, shuffle partition sizing, and Spark UI diagnostics."
+            }],
+            // --- REUSABLE ACCELERATORS ---
             "val-framework": [
-                { 
-                    name: "Data Validation Framework Overview.pdf", 
-                    type: "PDF", 
-                    updated: "2026-04-17", 
-                    lastModified: "2026-04-17T08:00:00Z",
-                    size: "2.4 MB",
+                {
+                    name: "Data Validation Framework Overview.pdf",
+                    type: "PDF", updated: "2026-04-17", lastModified: "2026-04-17T08:00:00Z", size: "2.4 MB",
                     summary: "Strategic guide for cross-platform data integrity verification using automated quality gates."
                 },
                 { name: "Validation Rules Template.xlsx", type: "Excel", updated: "2024-03-12", size: "1.1 MB" },
                 { name: "DVF Implementation Guide.docx", type: "Doc", updated: "2024-03-05", size: "850 KB" }
             ],
             "etl-templates": [
-                { 
-                    name: "Standard ETL Pattern.pdf", 
-                    type: "PDF", 
-                    updated: "2024-02-15", 
-                    size: "1.8 MB",
+                {
+                    name: "Standard ETL Pattern.pdf",
+                    type: "PDF", updated: "2024-02-15", size: "1.8 MB",
                     summary: "Standardized templates for Informatica and Spark mapping developers to accelerate development cycles."
                 },
                 { name: "Informatica Mapping Template.xml", type: "Other", updated: "2024-02-20", size: "45 KB" }
@@ -556,7 +621,68 @@
             </div>
         );
 
+        const MarkdownViewer = ({ doc, onClose }) => {
+            const [content, setContent] = useState('');
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                // Try embedded content first (works on file:// and HTTP)
+                const embedded = window.docsContent && window.docsContent[doc.viewPath];
+                if (embedded) {
+                    setContent(embedded);
+                    setLoading(false);
+                } else {
+                    // Fallback to fetch (GitHub Pages / HTTP)
+                    fetch(doc.viewPath)
+                        .then(r => r.text())
+                        .then(text => { setContent(text); setLoading(false); })
+                        .catch(() => {
+                            setContent('# Document Not Found\n\nThis document could not be loaded. Please check that `docs-data.js` is present.');
+                            setLoading(false);
+                        });
+                }
+            }, [doc.viewPath]);
+
+            return (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 3000,
+                    background: 'rgba(2, 6, 23, 0.85)', backdropFilter: 'blur(8px)',
+                    display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+                    padding: '40px 20px', overflowY: 'auto'
+                }} onClick={(e) => e.target === e.currentTarget && onClose()}>
+                    <div style={{
+                        background: 'var(--bg-white)', borderRadius: 'var(--border-radius-lg)',
+                        border: '1px solid var(--border)', width: '100%', maxWidth: '860px',
+                        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)', overflow: 'hidden'
+                    }}>
+                        {/* Header */}
+                        <div style={{
+                            padding: '20px 28px', borderBottom: '1px solid var(--border)',
+                            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                            background: 'linear-gradient(135deg, var(--accent), #7c3aed)',
+                        }}>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                                <Icon name="book-open" size={20} style={{color: 'white'}} />
+                                <span style={{fontWeight: 700, color: 'white', fontSize: '1rem'}}>{doc.name}</span>
+                            </div>
+                            <button onClick={onClose} style={{
+                                background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '6px',
+                                padding: '6px 12px', color: 'white', cursor: 'pointer', fontWeight: 600, fontSize: '0.8rem'
+                            }}>✕ Close</button>
+                        </div>
+                        {/* Content */}
+                        <div
+                            className="markdown-body"
+                            style={{ padding: '36px 40px', lineHeight: 1.8 }}
+                            dangerouslySetInnerHTML={{ __html: loading ? '<p>Loading...</p>' : marked.parse(content) }}
+                        />
+                    </div>
+                </div>
+            );
+        };
+
         const ContentPage = ({ nodeId }) => {
+            const [viewingDoc, setViewingDoc] = useState(null);
             const findNodePath = (nodes, id, path = []) => {
                 for (const node of nodes) {
                     if (node.id === id) return [...path, node.title];
@@ -583,6 +709,7 @@
 
             return (
                 <div className="content-page">
+                    {viewingDoc && <MarkdownViewer doc={viewingDoc} onClose={() => setViewingDoc(null)} />}
                     <div className="breadcrumb">
                         <span>Core</span>
                         <Icon name="chevron-right" size={12} />
@@ -622,7 +749,7 @@
                                 <div key={doc.name} className="doc-item" style={{alignItems: 'flex-start'}}>
                                     <div className="doc-info" style={{alignItems: 'flex-start'}}>
                                         <div className="doc-type-icon" style={{marginTop: '4px'}}>
-                                            <Icon name={doc.type === 'Excel' ? 'file-excel' : (doc.type === 'PDF' ? 'file-pdf' : 'file-lines')} />
+                                            <Icon name={doc.type === 'Guide' ? 'book-open' : (doc.type === 'Excel' ? 'file-excel' : (doc.type === 'PDF' ? 'file-pdf' : 'file-lines'))} />
                                         </div>
                                         <div style={{flex: 1}}>
                                             <span className="doc-name">{doc.name}</span>
@@ -641,18 +768,28 @@
                                     </div>
                                     
                                     <div style={{display: 'flex', gap: '8px', flexShrink: 0}}>
-                                        {doc.downloadPath ? (
-                                            <a 
-                                                href={doc.downloadPath} 
-                                                download={doc.name}
+                                        {doc.viewPath && (
+                                            <button
                                                 className="btn btn-primary"
+                                                style={{display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, var(--accent), #7c3aed)'}}
+                                                onClick={() => setViewingDoc(doc)}
+                                            >
+                                                <Icon name="book-open" size={14} /> Read
+                                            </button>
+                                        )}
+                                        {doc.downloadPath && (
+                                            <a
+                                                href={doc.downloadPath}
+                                                download={doc.name}
+                                                className="btn btn-outline"
                                                 style={{textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px'}}
                                             >
                                                 <Icon name="download" size={14} /> Download
                                             </a>
-                                        ) : (
-                                            <button className="btn btn-outline" onClick={() => alert(`Opening Mock Document: ${doc.name}`)}>
-                                                Open
+                                        )}
+                                        {!doc.viewPath && !doc.downloadPath && (
+                                            <button className="btn btn-outline">
+                                                Coming Soon
                                             </button>
                                         )}
                                     </div>

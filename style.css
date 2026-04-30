@@ -996,3 +996,46 @@ body {
   pointer-events: none;
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* --- Markdown Document Viewer --- */
+.markdown-body { color: var(--text-main); }
+.markdown-body h1 { font-size: 1.9rem; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.02em; color: var(--accent); }
+.markdown-body h2 { font-size: 1.3rem; font-weight: 700; margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); color: var(--text-main); }
+.markdown-body h3 { font-size: 1.05rem; font-weight: 700; margin: 24px 0 10px; color: var(--text-main); }
+.markdown-body p { margin: 0 0 16px; color: var(--text-muted); }
+.markdown-body strong { color: var(--text-main); }
+.markdown-body ul, .markdown-body ol { padding-left: 24px; margin: 0 0 16px; color: var(--text-muted); }
+.markdown-body li { margin-bottom: 6px; }
+.markdown-body a { color: var(--accent); text-decoration: none; }
+.markdown-body a:hover { text-decoration: underline; }
+.markdown-body code {
+  background: var(--bg-main); border: 1px solid var(--border);
+  padding: 2px 6px; border-radius: 4px; font-size: 0.85em;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace; color: #a78bfa;
+}
+.markdown-body pre {
+  background: #0d1117; border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px; overflow-x: auto; margin: 16px 0;
+}
+.markdown-body pre code {
+  background: none; border: none; padding: 0; color: #e2e8f0;
+  font-size: 0.82rem; line-height: 1.7;
+}
+.markdown-body table {
+  width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.875rem;
+}
+.markdown-body th {
+  background: var(--bg-main); padding: 10px 16px; text-align: left;
+  font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+  border: 1px solid var(--border); color: var(--text-muted);
+}
+.markdown-body td {
+  padding: 10px 16px; border: 1px solid var(--border); color: var(--text-muted);
+  vertical-align: top;
+}
+.markdown-body tr:nth-child(even) td { background: var(--bg-main); }
+.markdown-body blockquote {
+  border-left: 4px solid var(--accent); margin: 16px 0;
+  padding: 12px 20px; background: var(--accent-light); border-radius: 0 8px 8px 0;
+}
+.markdown-body hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
