@@ -172,6 +172,48 @@
                 viewPath: "docs/data-quality.md",
                 summary: "End-to-end DQ framework covering the 7 dimensions of data quality, automated rule engine in PySpark, quarantine zone design, and reconciliation checks."
             }],
+            "metadata-lineage": [{
+                name: "Metadata & Lineage Management",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "12 KB",
+                viewPath: "docs/metadata-lineage.md",
+                summary: "Foundation of enterprise data governance using Apache Atlas — covering technical/business metadata, automated lineage capture via hooks, and classification propagation."
+            }],
+            "data-governance": [{
+                name: "Data Governance & Compliance",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/data-governance.md",
+                summary: "Framework for managing data as an asset using Apache Ranger for access control, column masking, and row-level filtering with PII detection standards."
+            }],
+            "performance-optimization": [{
+                name: "Performance & Optimization Standards",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/performance-optimization.md",
+                summary: "Platform-wide tuning playbooks for Hive, Impala, and Spark — covering statistics, join strategies, file compaction, and YARN resource management."
+            }],
+            "data-retention": [{
+                name: "Data Retention & Archival",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/data-retention.md",
+                summary: "Lifecycle management for enterprise data — defining retention tiers (Hot/Warm/Cold), automated archival to ADLS/S3, and regulatory compliance (RBI/SEBI)."
+            }],
+            "reporting-layer": [{
+                name: "Reporting & Consumption Layer",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/reporting-layer.md",
+                summary: "Architectural standards for the reporting layer — covering BI tool integration, semantic layer design, and high-performance consumption using Impala and Hive LLAP."
+            }],
+            "monitoring-observability": [{
+                name: "Monitoring & Observability",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/monitoring-observability.md",
+                summary: "Strategy for maintaining platform health — covering infrastructure metrics, job-level diagnostics in Spark UI, and automated alerting using Cloudera Manager."
+            }],
+            "design-patterns": [{
+                name: "Best Practices & Design Patterns",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/design-patterns.md",
+                summary: "Reference for common engineering patterns: Idempotency, Medallion Architecture, Watermarking, and Audit Frameworks."
+            }],
             // --- CDP MIGRATION ---
             "migration-strategy": [{
                 name: "Migration Planning & Strategy",
@@ -185,6 +227,54 @@
                 viewPath: "docs/hive-migration.md",
                 summary: "Step-by-step Hive 1.x/2.x to Hive 3.x migration — reserved keyword fixes, ACID table management, metastore schema upgrade, and Hive Warehouse Connector setup."
             }],
+            "impala-migration": [{
+                name: "Impala Migration Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/impala-migration.md",
+                summary: "Migrating low-latency SQL workloads to CDP — covering metadata sync, resource pool migration, and performance tuning for Impala 4.x."
+            }],
+            "spark-migration": [{
+                name: "Spark Migration Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/spark-migration.md",
+                summary: "Upgrading to Spark 3 on CDP — covering Adaptive Query Execution (AQE), breaking changes, and dependency management for Scala/Python jobs."
+            }],
+            "hdfs-migration": [{
+                name: "HDFS Migration Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/hdfs-migration.md",
+                summary: "Large-scale data movement using DistCP and Replication Manager — preserving ACLs, managing quotas, and verifying data integrity."
+            }],
+            "security-migration": [{
+                name: "Security & Governance Migration",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/security-migration.md",
+                summary: "Transitioning security frameworks (Sentry to Ranger, Navigator to Atlas) and identity management (FreeIPA/AD) to the CDP Shared Data Experience (SDX)."
+            }],
+            "workflow-migration": [{
+                name: "Workflow & Orchestration Migration",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/workflow-migration.md",
+                summary: "Modernizing orchestration from Oozie to Apache Airflow on CDP — covering DAG conversion, dependency mapping, and managed CDE Airflow."
+            }],
+            "etl-integration": [{
+                name: "Informatica & ETL Integration",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/etl-integration.md",
+                summary: "Connecting 3rd-party ETL tools (Informatica, Talend) to CDP — optimizing pushdown logic, driver upgrades, and connectivity via Knox."
+            }],
+            "post-migration": [{
+                name: "Post-Migration Operations",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/post-migration.md",
+                summary: "Operational handover and decommission strategies — hypercare support, decommissioning legacy clusters, and establishing production support rotas."
+            }],
+            "validation-benchmarking": [{
+                name: "Validation & Benchmarking",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/validation-benchmarking.md",
+                summary: "Ensuring consistency and performance parity — covering data reconciliation scripts, performance benchmarking, and SLA verification on CDP."
+            }],
             // --- PLATFORM BEST PRACTICES ---
             "hive-impala-perf": [{
                 name: "Hive & Impala Performance Best Practices",
@@ -197,6 +287,24 @@
                 type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "16 KB",
                 viewPath: "docs/spark-opt.md",
                 summary: "Production Spark tuning — AQE, broadcast joins, skew handling with salting, memory configuration, shuffle partition sizing, and Spark UI diagnostics."
+            }],
+            "arch-bp": [{
+                name: "Architecture Best Practices",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/arch-best-practices.md",
+                summary: "Foundational principles for designing scalable, governed data platforms — covering zone-based architecture, decoupling, and automation standards."
+            }],
+            "security-compliance": [{
+                name: "Security & Compliance Standards",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/security-compliance.md",
+                summary: "Enterprise security protocols — Kerberos authentication, fine-grained Ranger authorization, audit standards, and encryption-at-rest/transit."
+            }],
+            "cost-opt": [{
+                name: "Performance & Cost Optimization",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/cost-optimization.md",
+                summary: "Maximizing ROI on the data platform — covering right-sizing, auto-scaling, spot instance usage, and storage tiering strategies."
             }],
             // --- REUSABLE ACCELERATORS ---
             "val-framework": [
