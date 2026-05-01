@@ -118,12 +118,30 @@
                 viewPath: "docs/informatica.md",
                 summary: "Complete guide covering Informatica PowerCenter migration strategies, ETL best practices, performance optimization, and real-world enterprise use cases."
             }],
+            "app-cdp": [{
+                name: "Application Integration with CDP",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "11 KB",
+                viewPath: "docs/app-cdp.md",
+                summary: "Technical blueprint for integrating enterprise applications with Cloudera Data Platform — covering connectivity, security, and data flow patterns."
+            }],
+            "etl-tooling": [{
+                name: "ETL Tooling Landscape",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/etl-tooling.md",
+                summary: "Strategic overview of the ETL ecosystem, including Informatica, Spark, and SQL-based transformation strategies for the modern data lake."
+            }],
             // --- PLATFORM KNOWLEDGE BASE ---
             "cloudera-overview": [{
                 name: "Cloudera Data Platform (CDP) Overview",
                 type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
                 viewPath: "docs/cloudera-overview.md",
                 summary: "Architecture deep-dive of Cloudera Data Platform — covering SDX, Data Lake, FreeIPA, Ranger, and Atlas with implementation guidance for enterprise deployments."
+            }],
+            "platform-migration": [{
+                name: "Platform Migration & Operations",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "11 KB",
+                viewPath: "docs/platform-migration.md",
+                summary: "Strategic guide for migrating legacy Hadoop platforms (CDH/HDP) to Cloudera Data Platform (CDP) with operational stability frameworks."
             }],
             // --- DATA WAREHOUSE ARCHITECTURE ---
             "dwh-overview": [
@@ -213,6 +231,12 @@
                 type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
                 viewPath: "docs/design-patterns.md",
                 summary: "Reference for common engineering patterns: Idempotency, Medallion Architecture, Watermarking, and Audit Frameworks."
+            }],
+            "troubleshooting": [{
+                name: "General Troubleshooting Methodology",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/troubleshooting.md",
+                summary: "Universal framework for debugging across the data ecosystem — covering isolation of variables, log analysis, and root cause methodology."
             }],
             // --- CDP MIGRATION ---
             "migration-strategy": [{
@@ -309,8 +333,9 @@
             // --- REUSABLE ACCELERATORS ---
             "val-framework": [
                 {
-                    name: "Data Validation Framework Overview.pdf",
-                    type: "PDF", updated: "2026-04-17", lastModified: "2026-04-17T08:00:00Z", size: "2.4 MB",
+                    name: "Data Validation Framework Overview",
+                    type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "11 KB",
+                    viewPath: "docs/val-standards.md",
                     summary: "Strategic guide for cross-platform data integrity verification using automated quality gates."
                 },
                 { name: "Validation Rules Template.xlsx", type: "Excel", updated: "2024-03-12", size: "1.1 MB" },
@@ -318,12 +343,124 @@
             ],
             "etl-templates": [
                 {
-                    name: "Standard ETL Pattern.pdf",
-                    type: "PDF", updated: "2024-02-15", size: "1.8 MB",
+                    name: "Standard ETL Pattern Guide",
+                    type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                    viewPath: "docs/etl-tooling.md",
                     summary: "Standardized templates for Informatica and Spark mapping developers to accelerate development cycles."
-                },
-                { name: "Informatica Mapping Template.xml", type: "Other", updated: "2024-02-20", size: "45 KB" }
-            ]
+                }
+            ],
+            "sql-library": [{
+                name: "SQL Script Library",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/sql-library.md",
+                summary: "Curated collection of high-performance SQL patterns for Hive and Impala, including DDL, deduplication, and window functions."
+            }],
+            "auto-scripts": [{
+                name: "Automation Scripts",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/auto-scripts.md",
+                summary: "Playbook for platform automation — covering environment health checks, data archival, and metastore synchronization scripts."
+            }],
+            "audit-framework": [{
+                name: "Audit & Reconciliation Framework",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/audit-framework.md",
+                summary: "Standards for tracking data integrity across the pipeline — covering row-count reconciliation, variance thresholds, and audit logging."
+            }],
+            // --- TROUBLESHOOTING PROD ---
+            "hive-issues": [{
+                name: "Hive Troubleshooting Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/hive-issues.md",
+                summary: "Playbook for resolving common Hive production issues: metastore timeouts, locked tables, and Tez session failures."
+            }],
+            "spark-issues": [{
+                name: "Spark Troubleshooting Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/spark-issues.md",
+                summary: "Production Spark diagnostics — handling OOM, data skew, executor loss, and shuffle performance bottlenecks."
+            }],
+            "etl-failures": [{
+                name: "ETL Failure Playbook",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/etl-failures.md",
+                summary: "Standard procedures for triaging and resolving pipeline failures across Informatica, Airflow, and Spark."
+            }],
+            "data-issues": [{
+                name: "Data Issues Troubleshooting Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/data-issues.md",
+                summary: "Diagnosing data-level corruption, schema drift, and duplication issues within the lake."
+            }],
+            // --- ONBOARDING ---
+            "arch-diagrams": [{
+                name: "Architecture Diagrams & Blueprints",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/arch-diagrams.md",
+                summary: "Visual guide to the platform's logical and physical architecture, network zones, and data integration points."
+            }],
+            "data-flow": [{
+                name: "Data Flow & Pipeline Standards",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/data-flow.md",
+                summary: "End-to-end lineage overview from source ingestion to consumption layers using the Medallion architecture."
+            }],
+            "access-checklist": [{
+                name: "Access Request Checklist",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/access-checklist.md",
+                summary: "Consolidated list of permissions required for developers and analysts across VPN, Linux, Hue, and Ranger."
+            }],
+            "env-setup": [{
+                name: "Environment Setup Guide",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/env-setup.md",
+                summary: "Step-by-step instructions for local IDE configuration, SSH tunneling, and remote development node setup."
+            }],
+            "runbooks": [{
+                name: "Operational Runbooks",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "8 KB",
+                viewPath: "docs/runbooks.md",
+                summary: "Standard procedures for platform maintenance, service restarts, and HDFS space management."
+            }],
+            // --- GOVERNANCE & QUALITY ---
+            "code-review": [{
+                name: "Code Review Checklist",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/code-review.md",
+                summary: "Mandatory quality standards for Spark, SQL, and Python pull requests in the CoE ecosystem."
+            }],
+            "dq-rules": [{
+                name: "Data Quality Rules Catalog",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/dq-rules.md",
+                summary: "Universal DQ dimensions and implementation patterns for technical and business-level data validation."
+            }],
+            "val-standards": [{
+                name: "Data Validation Standards",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "11 KB",
+                viewPath: "docs/val-standards.md",
+                summary: "Enterprise rules for reconciliation, check-summing, and threshold-based data integrity checks."
+            }],
+            // --- LEARNING HUB ---
+            "internal-kt": [{
+                name: "Internal Knowledge Transfer (KT)",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/internal-kt.md",
+                summary: "Framework for conducting technical deep-dives and project walkthroughs within the engineering team."
+            }],
+            "recorded-sessions": [{
+                name: "Recorded Sessions Library",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "9 KB",
+                viewPath: "docs/recorded-sessions.md",
+                summary: "On-demand catalog of technical training videos and architecture reviews conducted on Microsoft Stream."
+            }],
+            "cert-guidance": [{
+                name: "Certification Guidance",
+                type: "Guide", updated: "2026-05-01", lastModified: "2026-05-01T00:00:00Z", size: "10 KB",
+                viewPath: "docs/cert-guidance.md",
+                summary: "Roadmap for obtaining Cloudera, Azure, and Data Engineering professional certifications."
+            }]
         };
 
         const featuredAccelerators = [
