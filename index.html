@@ -111,6 +111,52 @@
         ];
 
         const documents = {
+            // --- MAIN CATEGORY SUMMARIES ---
+            "app-kb": [{
+                name: "Application Knowledge Base",
+                summary: "Standard operating procedures and technical guides for enterprise application migration, ETL tooling integration, and cross-platform connectivity."
+            }],
+            "platform-kb": [{
+                name: "Platform Knowledge Base",
+                summary: "Deep-dives into Cloudera Data Platform architecture, platform-level migration strategies, and enterprise cluster operations."
+            }],
+            "dwh-arch": [{
+                name: "Data Warehouse Architecture",
+                summary: "The definitive blueprint for the Smart Analytica data warehouse — covering modeling, ingestion, transformation, and governance layers."
+            }],
+            "cdp-migration": [{
+                name: "CDP Migration Knowledge Base",
+                summary: "A specialized library of guides and playbooks for transitioning legacy workloads (Hive, Spark, Impala) to the modern CDP environment."
+            }],
+            "best-practices": [{
+                name: "Platform Best Practices",
+                summary: "Curated collection of engineering standards for performance tuning, cost optimization, and secure development on the data platform."
+            }],
+            "accelerators": [{
+                name: "Reusable Accelerators",
+                summary: "Turnkey frameworks and automated templates designed to accelerate development cycles and ensure consistency across projects."
+            }],
+            "troubleshooting-prod": [{
+                name: "Troubleshooting & Production Issues",
+                summary: "Field-tested playbooks for diagnosing and resolving critical failures in Hive, Spark, and ETL pipelines."
+            }],
+            "onboarding": [{
+                name: "Project Onboarding Kit",
+                summary: "Essential resources for new team members: architecture diagrams, access checklists, and environment setup guides."
+            }],
+            "gov-quality": [{
+                name: "Governance & Quality",
+                summary: "Frameworks and checklists for maintaining data integrity, automated quality rules, and code review standards."
+            }],
+            "learning-hub": [{
+                name: "Learning Hub",
+                summary: "A centralized center for professional growth, certification guidance, and recorded internal knowledge transfer sessions."
+            }],
+            "metrics": [{
+                name: "Metrics & Insights",
+                summary: "Advanced analytics and platform utilization metrics — tracking data growth, compute efficiency, and user adoption trends."
+            }],
+
             // --- APPLICATION KNOWLEDGE BASE ---
             "informatica": [{
                 name: "Informatica Migration & Best Practices",
@@ -926,23 +972,24 @@
             );
         };
 
-        const ContentPage = ({ nodeId }) => {
+        const ContentPage = ({ nodeId, onSelect }) => {
             const [viewingDoc, setViewingDoc] = useState(null);
-            const findNodePath = (nodes, id, path = []) => {
+            
+            const findNodeAndPath = (nodes, id, path = []) => {
                 for (const node of nodes) {
-                    if (node.id === id) return [...path, node.title];
+                    if (node.id === id) return { node, path: [...path, node.title] };
                     if (node.children) {
-                        const childPath = findNodePath(node.children, id, [...path, node.title]);
-                        if (childPath) return childPath;
+                        const result = findNodeAndPath(node.children, id, [...path, node.title]);
+                        if (result) return result;
                     }
                 }
                 return null;
             };
 
-            const path = useMemo(() => findNodePath(taxonomy, nodeId), [nodeId]);
+            const nodeData = useMemo(() => findNodeAndPath(taxonomy, nodeId), [nodeId]);
             const docs = documents[nodeId] || [];
 
-            if (!path) {
+            if (!nodeData) {
                 return (
                     <div className="content-page" style={{ padding: '20px', color: 'var(--text-muted)' }}>
                         <Icon name="alert-circle" size={32} />
@@ -951,6 +998,9 @@
                     </div>
                 );
             }
+
+            const { node, path } = nodeData;
+            const hasSubsections = node.children && node.children.length > 0;
 
             return (
                 <div className="content-page">
@@ -975,6 +1025,25 @@
                             }
                         </p>
                     </header>
+
+                    {hasSubsections && (
+                        <div className="subsections-section" style={{marginBottom: '40px'}}>
+                            <h3 className="section-title"><Icon name="layout" /> Sub-sections</h3>
+                            <div className="stats-grid" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '20px'}}>
+                                {node.children.map(child => (
+                                    <div key={child.id} className="card tile" onClick={() => onSelect(child.id)} style={{padding: '24px'}}>
+                                        <div className="tile-icon" style={{width: '40px', height: '40px'}}>
+                                            <Icon name={child.icon || (child.children ? 'folder' : 'file-text')} size={18} />
+                                        </div>
+                                        <h4 style={{margin: '0', fontSize: '0.95rem'}}>{child.title}</h4>
+                                        <div style={{marginTop: 'auto', paddingTop: '12px', fontSize: '0.7rem', color: 'var(--accent)', fontWeight: 700}}>
+                                            EXPLORE <Icon name="chevron-right" size={10} />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <h3 className="section-title"><Icon name="files" /> Enterprise Documents</h3>
                     <div className="doc-list">
@@ -1040,7 +1109,17 @@
                                     </div>
                                 </div>
                             );
-                        }) : <p className="no-docs">No enterprise documents found for this section yet.</p>}
+                        }) : (
+                            <div className="card" style={{padding: '30px', textAlign: 'center', background: 'var(--bg-main)', borderStyle: 'dashed'}}>
+                                <Icon name="file-lines" size={24} style={{opacity: 0.3, marginBottom: '12px'}} />
+                                <p style={{color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0}}>
+                                    {hasSubsections 
+                                        ? "Select a sub-section above to view specific documentation." 
+                                        : "No direct documents found for this section yet."
+                                    }
+                                </p>
+                            </div>
+                        )}
                     </div>
 
                     <div className="related-links" style={{marginTop: '40px'}}>
@@ -1205,7 +1284,7 @@
                                 onSelect={handleNavigate} 
                                 onClose={() => { setSearchQuery(''); setSearchResults([]); }}
                             />
-                            {activeId === 'home' ? <Dashboard onSelect={handleNavigate} /> : <ContentPage nodeId={activeId} />}
+                            {activeId === 'home' ? <Dashboard onSelect={handleNavigate} /> : <ContentPage nodeId={activeId} onSelect={handleNavigate} />}
                         </div>
                         <NewsTicker />
                     </main>
