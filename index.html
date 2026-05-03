@@ -34,6 +34,7 @@
         // --- Mock Data ---
         const taxonomy = [
             { id: "home", title: "HOME", icon: "Home" },
+            { id: "quick-ref", title: "QUICK REFERENCE GUIDE", icon: "BookOpen" },
             { id: "app-kb", title: "APPLICATION KNOWLEDGE BASE", icon: "BookOpen", children: [
                 { id: "informatica", title: "Informatica Migration & Best Practices" },
                 { id: "app-cdp", title: "Application Integration with CDP" },
@@ -112,6 +113,10 @@
 
         const documents = {
             // --- MAIN CATEGORY SUMMARIES ---
+            "quick-ref": [{
+                name: "Quick Reference Guide",
+                summary: "Essential instructions on how to navigate, search, and utilize the Smart Analytica CoE Portal effectively."
+            }],
             "app-kb": [{
                 name: "Application Knowledge Base",
                 summary: "Standard operating procedures and technical guides for enterprise application migration, ETL tooling integration, and cross-platform connectivity."
@@ -155,6 +160,14 @@
             "metrics": [{
                 name: "Metrics & Insights",
                 summary: "Advanced analytics and platform utilization metrics — tracking data growth, compute efficiency, and user adoption trends."
+            }],
+
+            // --- QUICK REFERENCE GUIDE ---
+            "quick-ref": [{
+                name: "Portal Quick Reference Guide",
+                type: "Guide", updated: "2026-05-03", lastModified: "2026-05-03T00:00:00Z", size: "3 KB",
+                viewPath: "docs/quick-reference.md",
+                summary: "Essential guide for new and existing users to navigate the Smart Analytica CoE Portal effectively."
             }],
 
             // --- APPLICATION KNOWLEDGE BASE ---
@@ -510,6 +523,7 @@
         };
 
         const featuredAccelerators = [
+            { id: "quick-ref", title: "Quick Reference Guide", description: "Learn how to navigate and use the CoE portal.", icon: "BookOpen" },
             { id: "val-framework", title: "Data Validation Framework", description: "Standardized tool for verifying data integrity across platforms.", icon: "Shield" },
             { id: "etl-templates", title: "ETL Templates", description: "Reusable Informatica and Spark templates for faster development.", icon: "Zap" },
             { id: "troubleshooting-prod", title: "Troubleshooting Guide", description: "Comprehensive library of known issues and resolution steps.", icon: "Search" },
